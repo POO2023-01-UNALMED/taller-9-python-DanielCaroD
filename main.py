@@ -30,10 +30,11 @@ boton_division = Button(root, text="/", width=9, height=3, bg="deep sky blue", f
 # Configuración de operaciones
 botones = [boton_1, boton_2, boton_3, boton_4, boton_5, boton_6, boton_7, boton_8, boton_9]
 operaciones = [boton_mas, boton_menos, boton_multiplicacion, boton_division]; simbolos = ["+", "-", "*", "/"]
-n1 = ""; simb = ""
+n1 = ""; simb = "";np = False
 
 def numero(evento):
-    global n1
+    global n1, np
+    if np == True : pantalla.delete(0, "end"); np = False
     numero = evento.widget.cget("text")
     pantalla.insert("end", numero)
     n1 += numero
@@ -57,9 +58,10 @@ def punto(evento):
         n1 += "."
 
 def igual(evento):
-    global n1
+    global n1, simb, np
     resultado = eval(n1) + 0.0
     pantalla.delete(0, "end"); pantalla.insert("end", resultado)
+    n1 = ""; simb = ""; np = True
 
 for boton in botones:
     boton.bind("<Button-1>", numero)
