@@ -30,20 +30,21 @@ boton_division = Button(root, text="/", width=9, height=3, bg="deep sky blue", f
 # Configuración de operaciones
 botones = [boton_1, boton_2, boton_3, boton_4, boton_5, boton_6, boton_7, boton_8, boton_9]
 operaciones = [boton_mas, boton_menos, boton_multiplicacion, boton_division]; simbolos = ["+", "-", "*", "/"]
-n1 = ""; simb = ""; np = False; sm = False
+n1 = ""; simb = ""; np = False; sm = False; opc1 = False; opc2 = False
 
 def numero(evento):
-    global n1, np, sm
+    global n1, np, sm, opc2
     if np == True : pantalla.delete(0, "end"); np = False
     numero = evento.widget.cget("text")
     pantalla.insert("end", numero)
-    n1 += numero; sm = True
+    n1 += numero; sm = True 
+    if opc1 == True: opc2 = True
 
 def comb(evento):
-    global n1, simb, sm
-    if sm == True:
+    global n1, simb, sm, opc1
+    if sm == True and opc2 == False:
         simbolo = evento.widget.cget("text")
-        if simb == "": n1 += simbolo
+        if simb == "": n1 += simbolo; opc1 = True
         else: 
             pantalla.delete(len(n1) - 1, "end")
             n1 = n1[:-1] + simbolo
@@ -51,7 +52,8 @@ def comb(evento):
         simb = simbolo
 
 def punto(evento):
-    global n1, simb
+    global n1, simb, np
+    if np == True : pantalla.delete(0, "end"); np = False
     num = n1
     if simb != "": num = n1.split(simb)[-1]
     if "." not in num:
@@ -59,10 +61,10 @@ def punto(evento):
         n1 += "."
 
 def igual(evento):
-    global n1, simb, np, sm
+    global n1, simb, np, sm, opc1, opc2
     resultado = eval(n1) + 0.0
     pantalla.delete(0, "end"); pantalla.insert("end", resultado)
-    n1 = ""; simb = ""; np = True; sm = False
+    n1 = ""; simb = ""; np = True; sm = False; opc1 = False; opc2 = False
 
 for boton in botones:
     boton.bind("<Button-1>", numero)
@@ -72,4 +74,3 @@ boton_punto.bind("<Button-1>", punto)
 boton_igual.bind("<Button-1>", igual)
 
 root.mainloop()
-
